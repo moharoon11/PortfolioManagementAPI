@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.service.UserService;
 
@@ -38,8 +39,8 @@ public class UserController {
 
     // Delete User
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ApiResponse> deleteUser(@RequestBody UserDTO userDTO) {
         userService.deleteUser(userDTO);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(new ApiResponse("User Deleted successfully", true));
     }
 }

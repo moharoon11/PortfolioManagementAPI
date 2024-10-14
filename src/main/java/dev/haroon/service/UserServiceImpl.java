@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deleteUser(UserDTO userDTO) {
+	public boolean deleteUser(UserDTO userDTO) throws NoResourceFoundException {
 		User user = userRepo.findById(userDTO.getUserId()).orElseThrow(() ->  new NoResourceFoundException("User Not Found!"));
 		userRepo.delete(user);
 		return true;

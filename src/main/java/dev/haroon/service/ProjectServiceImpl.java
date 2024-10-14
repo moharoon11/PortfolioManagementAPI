@@ -59,7 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Integer createProjectWithFile(ProjectDTO projectDTO, MultipartFile file) {
+    public Integer createProjectWithFile(ProjectDTO projectDTO, MultipartFile file) throws IOException {
         try {
             Project project = convertToProject(projectDTO, file);
             Project savedProject = projectRepository.save(project);
@@ -70,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Integer updateProject(ProjectDTO projectDTO, MultipartFile file) {
+    public Integer updateProject(ProjectDTO projectDTO, MultipartFile file) throws IOException{
         try {
             Project existingProject = projectRepository.findById(projectDTO.getProjectId())
                     .orElseThrow(() -> new NoResourceFoundException("Project not found"));
@@ -93,7 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean deleteProject(Integer userId, Integer projectId) {
+    public boolean deleteProject(Integer userId, Integer projectId) throws NoResourceFoundException {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new NoResourceFoundException("Project not found"));
 

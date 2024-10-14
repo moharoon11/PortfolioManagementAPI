@@ -1,5 +1,6 @@
 package dev.haroon.controller;
 
+import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.ProjectDTO;
 import dev.haroon.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,7 +22,7 @@ public class ProjectController {
     @PostMapping("/create")
     public ResponseEntity<Integer> createProject(
             @RequestPart("projectDTO") ProjectDTO projectDTO, 
-            @RequestPart("file") MultipartFile file) {
+            @RequestPart("file") MultipartFile file) throws IOException {
 
         Integer projectId = projectService.createProjectWithFile(projectDTO, file);
         return ResponseEntity.ok(projectId);
@@ -37,7 +39,7 @@ public class ProjectController {
     @PutMapping("/update")
     public ResponseEntity<Integer> updateProject(
             @RequestPart("projectDTO") ProjectDTO projectDTO,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
+            @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
 
         Integer updatedProjectId = projectService.updateProject(projectDTO, file);
         return ResponseEntity.ok(updatedProjectId);
@@ -46,9 +48,9 @@ public class ProjectController {
     // Delete a project by ID
  // Delete a project by user ID and project ID
     @DeleteMapping("/delete/{userId}/{projectId}")
-    public ResponseEntity<Boolean> deleteProject(@PathVariable Integer userId, @PathVariable Integer projectId) {
+    public ResponseEntity<ApiResponse> deleteProject(@PathVariable Integer userId, @PathVariable Integer projectId) {
         boolean isDeleted = projectService.deleteProject(userId, projectId);
-        return ResponseEntity.ok(isDeleted);
+        return ResponseEntity.ok(new ApiResponse("Project deleted sucessfully!", true));
     }
 
 }

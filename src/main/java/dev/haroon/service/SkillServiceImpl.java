@@ -23,7 +23,7 @@ public class SkillServiceImpl implements SkillService {
 	private UserRepo userRepo;
 	
 	@Override
-	public Integer createSkill(SkillDTO skillDTO) {
+	public Integer createSkill(SkillDTO skillDTO) throws NoResourceFoundException {
 		
 		Integer userId = skillDTO.getUserId();
 		
@@ -34,7 +34,7 @@ public class SkillServiceImpl implements SkillService {
 	}
 
 	@Override
-	public Set<SkillDTO> getAllSkills(Integer userId) {
+	public Set<SkillDTO> getAllSkills(Integer userId) throws NoResourceFoundException {
 		
 		User user = userRepo.findById(userId).orElseThrow(() -> new NoResourceFoundException("User not found!"));
 		
@@ -45,7 +45,7 @@ public class SkillServiceImpl implements SkillService {
 	}
 
 	@Override
-	public Integer updateSkill(SkillDTO skillDTO) {
+	public Integer updateSkill(SkillDTO skillDTO) throws NoResourceFoundException {
 
 	    // Fetch the existing skill from the database
 	    Skill skill = skillRepo.findById(skillDTO.getSkillId())
@@ -72,7 +72,7 @@ public class SkillServiceImpl implements SkillService {
 	}
 
 	@Override
-	public boolean deleteSkill(Integer userId, Integer skillId) {
+	public void deleteSkill(Integer userId, Integer skillId) throws NoResourceFoundException {
 	
 		Skill skill = skillRepo.findById(skillId).orElseThrow(() -> new NoResourceFoundException("Skill Not found"));
 		
@@ -81,7 +81,6 @@ public class SkillServiceImpl implements SkillService {
 		}
 		
 		skillRepo.delete(skill);
-		return true;
 	}
 
 	private Skill dtoToSkill(SkillDTO skillDTO, User user) {

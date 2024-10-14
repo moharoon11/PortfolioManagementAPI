@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.SkillDTO;
 import dev.haroon.service.SkillService;
 
@@ -40,8 +41,9 @@ public class SkillController {
 	}
 	
 	@DeleteMapping("/delete/{userId}/{skillId}")
-	public ResponseEntity<Boolean> deleteSkill(@PathVariable("userId") Integer userId, @PathVariable("skillId") Integer skillId) {
-		return ResponseEntity.ok(skillService.deleteSkill(userId, skillId));
+	public ResponseEntity<ApiResponse> deleteSkill(@PathVariable("userId") Integer userId, @PathVariable("skillId") Integer skillId) {
+		skillService.deleteSkill(userId, skillId);
+		return ResponseEntity.ok(new ApiResponse("Skill deleted sucessfully!", true));
 	}
 	
 	

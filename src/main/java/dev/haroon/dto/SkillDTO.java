@@ -34,6 +34,8 @@ public class SkillDTO {
 	
 	private String point5;
 	
+	private String sourceLink;
+	
 	// foreign key reference from user table
 	private Integer userId;
 }

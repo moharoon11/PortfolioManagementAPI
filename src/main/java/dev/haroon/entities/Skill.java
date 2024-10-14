@@ -34,6 +34,8 @@ public class Skill {
 	
 	private String point5;
 	
+	private String sourceLink;
+	
 	  // many skills can have one user
 	  @ManyToOne
 	  @JoinColumn(name = "user_id", nullable = false) // Foreign key column in Project table

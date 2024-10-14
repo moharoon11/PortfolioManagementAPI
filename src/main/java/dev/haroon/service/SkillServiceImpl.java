@@ -64,6 +64,7 @@ public class SkillServiceImpl implements SkillService {
 	    skill.setPoint3(skillDTO.getPoint3());
 	    skill.setPoint4(skillDTO.getPoint4());
 	    skill.setPoint5(skillDTO.getPoint5());
+	    skill.setSourceLink(skillDTO.getSourceLink());
 
 	    // Save the updated entity
 	    skill = skillRepo.save(skill);
@@ -93,6 +94,7 @@ public class SkillServiceImpl implements SkillService {
 		skill.setPoint3(skillDTO.getPoint3());
 		skill.setPoint4(skillDTO.getPoint4());
 		skill.setPoint5(skillDTO.getPoint5());
+		skill.setSourceLink(skillDTO.getSourceLink());
 		return skill;
 	}
 	
@@ -108,6 +110,7 @@ public class SkillServiceImpl implements SkillService {
 		skillDTO.setPoint3(skill.getPoint3());
 		skillDTO.setPoint4(skill.getPoint4());
 		skillDTO.setPoint5(skill.getPoint5());
+		skillDTO.setSourceLink(skill.getSourceLink());
 		return skillDTO;
 	}
 }

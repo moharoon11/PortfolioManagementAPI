@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +34,9 @@ public class ProjectServiceImpl implements ProjectService {
         project.setCodeLink(projectDTO.getCodeLink());
         project.setTechnology(projectDTO.getTechnology());
         if (file != null && !file.isEmpty()) {
-            project.setProjectImage(file.getBytes()); // Set image data
+            project.setImageDate(file.getBytes()); // Set image data
+            project.setImageType(file.getContentType());
+            project.setImageName(file.getOriginalFilename());
         }
 
         // Set the user (Assuming projectDTO has userId)
@@ -49,7 +52,9 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setProjectId(project.getProjectId());
         projectDTO.setProjectName(project.getProjectName());
-        projectDTO.setProjectImage(project.getProjectImage());
+        projectDTO.setImageDate(project.getImageDate());
+        projectDTO.setImageName(project.getImageName());
+        projectDTO.setImageType(project.getImageType());
         projectDTO.setProjectDescription(project.getProjectDescription());
         projectDTO.setLiveLink(project.getLiveLink());
         projectDTO.setCodeLink(project.getCodeLink());
@@ -82,7 +87,9 @@ public class ProjectServiceImpl implements ProjectService {
             existingProject.setTechnology(projectDTO.getTechnology());
             // If a new file is provided, update the image
             if (file != null && !file.isEmpty()) {
-                existingProject.setProjectImage(file.getBytes());
+                existingProject.setImageDate(file.getBytes());
+                existingProject.setImageName(file.getOriginalFilename());
+                existingProject.setImageType(file.getContentType());
             }
 
             Project updatedProject = projectRepository.save(existingProject);
@@ -112,4 +119,9 @@ public class ProjectServiceImpl implements ProjectService {
         List<Project> projects = projectRepository.findByUserUserId(userId);
         return projects.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+
+	@Override
+	public Project getProjectById(Integer productId) {
+		return projectRepository.findById(productId).get();
+	}
 }

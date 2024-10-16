@@ -25,7 +25,11 @@ public class Project {
     private String projectDescription;
 
     @Lob
-    private byte[] projectImage;
+	private byte[] imageDate;
+    
+    private String imageName;
+    
+    private String imageType;
 
     private String liveLink;
 

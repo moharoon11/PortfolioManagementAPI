@@ -1,6 +1,7 @@
 package dev.haroon.service;
 
 import dev.haroon.dto.ProjectDTO;
+import dev.haroon.entities.Project;
 import dev.haroon.exceptions.NoResourceFoundException;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -18,4 +19,7 @@ public interface ProjectService {
     List<ProjectDTO> getProjectsByUserId(Integer userId);
 
 	boolean deleteProject(Integer userId, Integer projectId) throws NoResourceFoundException;
+
+	Project getProjectById(Integer productId);
+
 }

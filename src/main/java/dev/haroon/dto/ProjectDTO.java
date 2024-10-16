@@ -10,7 +10,9 @@ public class ProjectDTO {
     private Integer projectId;
     private String projectName;
     private String projectDescription;
-    private byte[] projectImage;
+    private byte[] imageDate;
+    private String imageType;
+    private String imageName;
     private String liveLink;
     private String codeLink;
     private String technology;

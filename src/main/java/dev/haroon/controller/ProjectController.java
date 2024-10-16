@@ -2,8 +2,10 @@ package dev.haroon.controller;
 
 import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.ProjectDTO;
+import dev.haroon.entities.Project;
 import dev.haroon.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,18 @@ public class ProjectController {
         List<ProjectDTO> projects = projectService.getProjectsByUserId(userId);
         return ResponseEntity.ok(projects);
     }
+    
+    
+     @GetMapping("/image/{projectId}")
+     public ResponseEntity<byte[]> getImageByProjectId(@PathVariable int projectId) {
+    	 
+    	 Project project = projectService.getProjectById(projectId);
+    	 
+    	 byte[] imageFile = project.getImageDate();
+    	 
+    	 return ResponseEntity.ok().contentType(MediaType.valueOf(project.getImageType())).body(imageFile);
+     }
+    
 
     // Update a project by ID
     @PutMapping("/update")

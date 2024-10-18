@@ -13,7 +13,6 @@ import dev.haroon.dto.ImageResponseDTO;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.entities.User;
 import dev.haroon.exceptions.NoResourceFoundException;
-import dev.haroon.exceptions.UserAlreadyExistException;
 import dev.haroon.repository.UserRepo;
 
 @Service
@@ -26,6 +25,7 @@ public class UserServiceImpl implements UserService {
 	
 	
 
+	@Override
 	public ApiResponse registerUser(UserDTO userDTO, MultipartFile profile1, MultipartFile profile2, MultipartFile profile3, MultipartFile resume) throws IOException {
 	    // Check if user already exists
 	    if (userRepo.existsById(userDTO.getUserId())) {

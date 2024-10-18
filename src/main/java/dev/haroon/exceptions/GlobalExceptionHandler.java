@@ -19,10 +19,7 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ApiResponse(ex.getMessage(), false), HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(UserAlreadyExistException.class)
-	public ResponseEntity<ApiResponse> userAlreadyExistExceptionHandler(UserAlreadyExistException ex) {
-		 return new ResponseEntity<>(new ApiResponse(ex.getMessage(), false), HttpStatus.BAD_REQUEST);
-	}
+
 	
 	@ExceptionHandler(IOException.class)
 	public ResponseEntity<ApiResponse> handleIOException(IOException ex) {

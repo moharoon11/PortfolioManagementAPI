@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.ImageResponseDTO;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.entities.User;
 import dev.haroon.exceptions.NoResourceFoundException;
+import dev.haroon.exceptions.UserAlreadyExistException;
 import dev.haroon.repository.UserRepo;
 
 @Service
@@ -22,44 +24,62 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepo userRepo;
 	
-	@Override  
-	public Integer registerUser(UserDTO userDTO, MultipartFile profile1, MultipartFile profile2, MultipartFile profile3, MultipartFile resume) throws IOException {
-		User user = dtoToUser(userDTO);
-		user.setUserImage1(profile1.getBytes());
-		user.setUserImage1FileName(profile1.getOriginalFilename());
-		user.setUserImage1Type(profile1.getContentType());
-		
-		user.setUserImage2(profile2.getBytes());
-		user.setUserImage2FileName(profile2.getOriginalFilename());
-		user.setUserImage2Type(profile2.getContentType());
-		
-		
-		
-		
-		user.setUserImage3(profile3.getBytes());
-		user.setUserImage3FileName(profile3.getOriginalFilename());
-		user.setUserImage3Type(profile3.getContentType());
-		
-		user.setResume(resume.getBytes());
-		user.setResumeName(resume.getOriginalFilename());
-		user.setResumeType(resume.getContentType());
-		
-		
-		User storedUser = userRepo.save(user);
-		return storedUser.getUserId();
+	
+
+	public ApiResponse registerUser(UserDTO userDTO, MultipartFile profile1, MultipartFile profile2, MultipartFile profile3, MultipartFile resume) throws IOException {
+	    // Check if user already exists
+	    if (userRepo.existsById(userDTO.getUserId())) {
+	        return new ApiResponse("User with this ID already exists! Please try creating with a different user ID.", false);
+	    }
+	    
+	    // Convert UserDTO to User entity
+	    User user = dtoToUser(userDTO);
+
+	    // Handle profile images and resume upload
+	    if (profile1 != null && !profile1.isEmpty()) {
+	        user.setUserImage1(profile1.getBytes());
+	        user.setUserImage1FileName(profile1.getOriginalFilename());
+	        user.setUserImage1Type(profile1.getContentType());
+	    }
+
+	    if (profile2 != null && !profile2.isEmpty()) {
+	        user.setUserImage2(profile2.getBytes());
+	        user.setUserImage2FileName(profile2.getOriginalFilename());
+	        user.setUserImage2Type(profile2.getContentType());
+	    }
+
+	    if (profile3 != null && !profile3.isEmpty()) {
+	        user.setUserImage3(profile3.getBytes());
+	        user.setUserImage3FileName(profile3.getOriginalFilename());
+	        user.setUserImage3Type(profile3.getContentType());
+	    }
+
+	    // Handle resume upload
+	    if (resume != null && !resume.isEmpty()) {
+	        user.setResume(resume.getBytes());
+	        user.setResumeName(resume.getOriginalFilename());
+	        user.setResumeType(resume.getContentType());
+	    }
+
+	    // Save the user
+	    userRepo.save(user);
+
+	    return new ApiResponse("User registered successfully!", true);
 	}
 
+
+
 	@Override
-	public boolean loginUser(UserDTO userDTO) throws NoResourceFoundException {
+	public boolean loginUser(Integer userId, String email, String password) throws NoResourceFoundException {
 	    // Retrieve user by userId
-	    User user = userRepo.findById(userDTO.getUserId())
+	    User user = userRepo.findById(userId)
 	                        .orElseThrow(() -> new NoResourceFoundException("User Not Found!"));
 
 	    // Check if the provided email and password match the stored values
-	    if (user.getEmail().equals(userDTO.getEmail()) && user.getPassword().equals(userDTO.getPassword())) {
+	    if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
 	        return true; // Authentication successful
 	    } else {
-	        throw new NoResourceFoundException("Invalid email or password!"); // Authentication failed
+	        throw new NoResourceFoundException("Invalid Credentials"); // Authentication failed
 	    }
 	}
 	

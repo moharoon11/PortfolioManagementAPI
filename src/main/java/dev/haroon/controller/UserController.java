@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.ImageResponseDTO;
+import dev.haroon.dto.LoginRequest;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.exceptions.NoResourceFoundException;
 import dev.haroon.service.UserService;
@@ -25,26 +26,30 @@ public class UserController {
 
     // Register User
     @PostMapping("/register")
-    public ResponseEntity<Integer> registerUser(@RequestPart("userDTO") UserDTO userDTO,
-    		                                    @RequestPart("userProfile1") MultipartFile profile1,
-    		                                    @RequestPart("userProfile2") MultipartFile profile2,
-    		                                    @RequestPart("userProfile3") MultipartFile profile3,
-    		                                    @RequestPart("resume") MultipartFile resume
-    		                                    
-    		) throws IOException {
-        Integer userId = userService.registerUser(userDTO, profile1, profile2, profile3, resume);
-        return new ResponseEntity<>(userId, HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> registerUser(
+        @RequestPart("userDTO") UserDTO userDTO,
+        @RequestPart("userProfile1") MultipartFile profile1,
+        @RequestPart("userProfile2") MultipartFile profile2,
+        @RequestPart("userProfile3") MultipartFile profile3,
+        @RequestPart("resume") MultipartFile resume
+    ) throws IOException {
+        ApiResponse response = userService.registerUser(userDTO, profile1, profile2, profile3, resume);
+        return ResponseEntity.ok(response);
     }
 
-    // Login User
+
+    
+
+    
     @PostMapping("/login")
-    public ResponseEntity<Boolean> loginUser(@RequestBody UserDTO userDTO) {
-        try {
-            boolean isAuthenticated = userService.loginUser(userDTO);
-            return ResponseEntity.ok(isAuthenticated); // Return true if authenticated
-        } catch (NoResourceFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false); // Return false if authentication fails
-        }
+    public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
+        boolean isAuthenticated = userService.loginUser(loginRequest.getUserId(), loginRequest.getEmail(), loginRequest.getPassword());
+        
+        if (isAuthenticated) {
+            return ResponseEntity.ok("Login successful");
+        } 
+        
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
     

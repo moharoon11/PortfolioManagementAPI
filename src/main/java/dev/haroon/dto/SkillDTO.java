@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SkillDTO {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	private Integer skillId;
 	
 	private String skillName;

@@ -186,4 +186,11 @@ public class UserServiceImpl implements UserService {
 		return userDTO;
 	}
 
+
+
+	@Override
+	public User getUserById(Integer userId) {
+		return userRepo.findById(userId).get();
+	}
+
 }

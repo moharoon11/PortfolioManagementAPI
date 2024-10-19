@@ -34,6 +34,8 @@ public class ProjectController {
             @RequestPart("projectDTO") ProjectDTO projectDTO, 
             @RequestPart("file") MultipartFile file) throws IOException {
 
+    	
+    	System.out.println(projectDTO);
         Integer projectId = projectService.createProjectWithFile(projectDTO, file);
         return ResponseEntity.ok(projectId);
     }

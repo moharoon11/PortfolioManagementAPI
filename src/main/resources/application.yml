@@ -1,12 +1,13 @@
 server:
   port: 8888
+  
 
 spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 5MB   # Maximum size for an uploaded file
+      max-request-size: 5MB  # Maximum size for the entire request (can include multiple files)
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

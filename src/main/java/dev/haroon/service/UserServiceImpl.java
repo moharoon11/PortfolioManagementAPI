@@ -123,6 +123,86 @@ public class UserServiceImpl implements UserService {
 	        // Save the updated user details to the database
 	        userRepo.save(user);
 	    }
+	 
+	 
+	 /**
+	  * private Integer userId;
+	
+	private String name;
+	
+	private String email;
+	
+	private String password;
+	
+	private String role;
+	
+	private String about;
+	  */
+	 
+	    @Override
+		public String updateUserFields(UserDTO userDTO) throws NoResourceFoundException {
+			User user = userRepo.findById(userDTO.getUserId()).get();
+			
+			if(user == null) {
+				throw new NoResourceFoundException("User not found");
+			}
+			
+			user.setName(userDTO.getName());
+			user.setEmail(userDTO.getEmail());
+			user.setPassword(userDTO.getPassword());
+			user.setRole(userDTO.getRole());
+			user.setAbout(userDTO.getAbout());
+			
+			userRepo.save(user);
+			return "User updated Sucessfully";
+		}
+	    
+	 
+	    @Override
+	    public String updateProfileImage(Integer userId, MultipartFile profileImage, String whichProfile) 
+	            throws NoResourceFoundException, IOException {
+	        
+	        // Check if user exists
+	        User user = userRepo.findById(userId)
+	            .orElseThrow(() -> new NoResourceFoundException("User not found"));
+
+	        // Validate the uploaded file
+	        if (profileImage == null || profileImage.isEmpty()) {
+	            return "No file provided for update";
+	        }
+	        
+	        // Process the uploaded file based on whichProfile
+	        switch (whichProfile) {
+	            case "image1":
+	                user.setUserImage1(profileImage.getBytes());
+	                user.setUserImage1FileName(profileImage.getOriginalFilename());
+	                user.setUserImage1Type(profileImage.getContentType());
+	                break;
+	            case "image2":
+	                user.setUserImage2(profileImage.getBytes());
+	                user.setUserImage2FileName(profileImage.getOriginalFilename());
+	                user.setUserImage2Type(profileImage.getContentType());
+	                break;
+	            case "image3":
+	                user.setUserImage3(profileImage.getBytes());
+	                user.setUserImage3FileName(profileImage.getOriginalFilename());
+	                user.setUserImage3Type(profileImage.getContentType());
+	                break;
+	            case "resume":
+	                user.setResume(profileImage.getBytes());
+	                user.setResumeName(profileImage.getOriginalFilename());
+	                user.setResumeType(profileImage.getContentType());
+	                break;
+	            default:
+	                throw new IllegalArgumentException("Invalid profile type specified");
+	        }
+
+	        // Save the user only once after all updates
+	        userRepo.save(user);
+	        return whichProfile + " updated successfully";
+	    }
+
+
 
 	 
 	 @Override
@@ -193,4 +273,11 @@ public class UserServiceImpl implements UserService {
 		return userRepo.findById(userId).get();
 	}
 
+
+
+	
+
+
+
+	
 }

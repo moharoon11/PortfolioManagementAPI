@@ -24,8 +24,12 @@ public interface UserService {
 	
 	public boolean deleteUser(UserDTO userDTO) throws NoResourceFoundException;
 
-	List<ImageResponseDTO> getUserProfileImages(Integer userId) throws NoResourceFoundException;
+	public List<ImageResponseDTO> getUserProfileImages(Integer userId) throws NoResourceFoundException;
 
-	ImageResponseDTO getUserResume(Integer userId) throws NoResourceFoundException;
+	public ImageResponseDTO getUserResume(Integer userId) throws NoResourceFoundException;
+	
+	public String updateUserFields(UserDTO userDTO) throws NoResourceFoundException;
+	
+	public String updateProfileImage(Integer userId, MultipartFile profileImage, String whichProfile) throws NoResourceFoundException, IOException ;
 
 }

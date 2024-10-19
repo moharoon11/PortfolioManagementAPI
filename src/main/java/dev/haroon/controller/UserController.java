@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import dev.haroon.dto.ApiResponse;
 import dev.haroon.dto.ImageResponseDTO;
@@ -28,6 +29,7 @@ import dev.haroon.dto.LoginRequest;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.entities.User;
 import dev.haroon.service.UserService;
+import jakarta.validation.Valid;
 
 
 
@@ -41,6 +43,7 @@ public class UserController {
     // Register User
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(
+    	@Valid
         @RequestPart("userDTO") UserDTO userDTO,
         @RequestPart("userProfile1") MultipartFile profile1,
         @RequestPart("userProfile2") MultipartFile profile2,
@@ -78,7 +81,7 @@ public class UserController {
 
 
     
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateUser(
         @RequestPart("userDTO") String userDTOJson, // Accept it as String
         @RequestPart(value = "userProfile1", required = false) MultipartFile profile1,
@@ -100,6 +103,56 @@ public class UserController {
         // Continue processing
         userService.updateUser(userDTO, profile1, profile2, profile3, resume);
         return ResponseEntity.ok(new ApiResponse("User updated successfully", true));
+    }
+    
+    @PutMapping("/update/info")
+    public ResponseEntity<ApiResponse> updateUserFields(
+            @RequestBody UserDTO userDTO) {
+        // Process userDTO (no files)
+        userService.updateUserFields(userDTO);
+        return ResponseEntity.ok(new ApiResponse("User fields updated successfully", true));
+    }
+
+    @PutMapping("/update/userImage1/{userId}")
+    public ResponseEntity<ApiResponse> updateUserImage1(
+            @PathVariable Integer userId,
+            @RequestPart(value = "userImage1", required = false) MultipartFile userImage1) throws IOException {
+        
+        // Process file uploads
+        String message = userService.updateProfileImage(userId, userImage1, "image1");
+        return ResponseEntity.ok(new ApiResponse(message , true));
+    }
+    
+    @PutMapping("/update/userImage2/{userId}")
+    public ResponseEntity<ApiResponse> updateUserImage2(
+            @PathVariable Integer userId,
+            @RequestPart(value = "userImage2", required = false) MultipartFile userImage2
+       ) throws IOException {
+        
+        // Process file uploads
+        String message = userService.updateProfileImage(userId, userImage2, "image2");
+        return ResponseEntity.ok(new ApiResponse(message , true));
+    }
+    
+    @PutMapping("/update/userImage3/{userId}")
+    public ResponseEntity<ApiResponse> updateUserImage3(
+            @PathVariable Integer userId,
+            @RequestPart(value = "userImage3", required = false) MultipartFile userImage3
+       ) throws IOException {
+        
+        // Process file uploads
+        String message = userService.updateProfileImage(userId, userImage3, "image3");
+        return ResponseEntity.ok(new ApiResponse(message , true));
+    }
+    
+    @PutMapping("/update/resume/{userId}")
+    public ResponseEntity<ApiResponse> updateResume(
+            @PathVariable Integer userId,
+            @RequestPart(value = "resume", required = false) MultipartFile resume) throws IOException {
+        
+        // Process file uploads
+        String message = userService.updateProfileImage(userId, resume, "resume");
+        return ResponseEntity.ok(new ApiResponse(message , true));
     }
 
 

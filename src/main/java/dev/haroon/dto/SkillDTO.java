@@ -21,6 +21,12 @@ public class SkillDTO {
 	
 	private String skillName;
 	
+	private byte[] skillIcon;
+	
+	private String iconType;
+	
+	private String iconName;
+	
 	private String learnedFrom;
 	
     private String point1;

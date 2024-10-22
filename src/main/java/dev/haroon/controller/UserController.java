@@ -28,6 +28,7 @@ import dev.haroon.dto.ImageResponseDTO;
 import dev.haroon.dto.LoginRequest;
 import dev.haroon.dto.UserDTO;
 import dev.haroon.entities.User;
+import dev.haroon.exceptions.NoResourceFoundException;
 import dev.haroon.service.UserService;
 import jakarta.validation.Valid;
 
@@ -176,6 +177,24 @@ public class UserController {
         }
 
         return ResponseEntity.ok(images); // 200 OK
+    }
+    
+    @GetMapping("/images/{userId}/image1")
+    public ResponseEntity<ImageResponseDTO> getProfileImage1(@PathVariable("userId") Integer userId) throws NoResourceFoundException, IOException {
+    	ImageResponseDTO imageResponseDTO = userService.loadImage(userId, "image1");
+    	return ResponseEntity.ok(imageResponseDTO);
+    }
+    
+    @GetMapping("/images/{userId}/image2")
+    public ResponseEntity<ImageResponseDTO> getProfileImage2(@PathVariable("userId") Integer userId) throws NoResourceFoundException, IOException {
+    	ImageResponseDTO imageResponseDTO = userService.loadImage(userId, "image2");
+    	return ResponseEntity.ok(imageResponseDTO);
+    }
+    
+    @GetMapping("/images/{userId}/image3")
+    public ResponseEntity<ImageResponseDTO> getProfileImage3(@PathVariable("userId") Integer userId) throws NoResourceFoundException, IOException {
+    	ImageResponseDTO imageResponseDTO = userService.loadImage(userId, "image3");
+    	return ResponseEntity.ok(imageResponseDTO);
     }
 
 

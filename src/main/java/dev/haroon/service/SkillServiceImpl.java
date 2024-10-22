@@ -1,11 +1,14 @@
 package dev.haroon.service;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import dev.haroon.dto.ImageResponseDTO;
 import dev.haroon.dto.SkillDTO;
 import dev.haroon.repository.SkillRepo;
 import dev.haroon.repository.UserRepo;
@@ -23,12 +26,16 @@ public class SkillServiceImpl implements SkillService {
 	private UserRepo userRepo;
 	
 	@Override
-	public Integer createSkill(SkillDTO skillDTO) throws NoResourceFoundException {
+	public Integer createSkill(SkillDTO skillDTO, MultipartFile skillIcon) throws NoResourceFoundException, IOException {
 		
 		Integer userId = skillDTO.getUserId();
 		
 		User user = userRepo.findById(userId).orElseThrow(() -> new NoResourceFoundException("User not found!"));
 		Skill skill = dtoToSkill(skillDTO, user);
+		skill.setSkillIcon(skillIcon.getBytes());
+		skill.setIconType(skillIcon.getContentType());
+		skill.setIconName(skillIcon.getOriginalFilename());
+		
 		skill = skillRepo.save(skill);
 		return skill.getSkillId();
 	}
@@ -39,13 +46,13 @@ public class SkillServiceImpl implements SkillService {
 		User user = userRepo.findById(userId).orElseThrow(() -> new NoResourceFoundException("User not found!"));
 		
 		Set<Skill> skills = skillRepo.findByUserUserId(userId);
-	
+	 
 		
 		return skills.stream().map(this::skillToDTO).collect(Collectors.toSet());
 	}
 
 	@Override
-	public Integer updateSkill(SkillDTO skillDTO) throws NoResourceFoundException {
+	public Integer updateSkill(SkillDTO skillDTO, MultipartFile file) throws NoResourceFoundException, IOException {
 
 	    // Fetch the existing skill from the database
 	    Skill skill = skillRepo.findById(skillDTO.getSkillId())
@@ -65,6 +72,12 @@ public class SkillServiceImpl implements SkillService {
 	    skill.setPoint4(skillDTO.getPoint4());
 	    skill.setPoint5(skillDTO.getPoint5());
 	    skill.setSourceLink(skillDTO.getSourceLink());
+	    
+	    if(file != null) {
+	    	skill.setSkillIcon(file.getBytes());
+	    	skill.setIconType(file.getContentType());
+	    	skill.setIconName(file.getOriginalFilename());
+	    }
 
 	    // Save the updated entity
 	    skill = skillRepo.save(skill);
@@ -110,6 +123,27 @@ public class SkillServiceImpl implements SkillService {
 		skillDTO.setPoint4(skill.getPoint4());
 		skillDTO.setPoint5(skill.getPoint5());
 		skillDTO.setSourceLink(skill.getSourceLink());
+		skillDTO.setSkillIcon(skill.getSkillIcon());
+		skillDTO.setIconType(skill.getIconType());
+		skillDTO.setIconName(skill.getIconName());
 		return skillDTO;
+	}
+
+	@Override
+	public ImageResponseDTO getSkillIconByName(Integer userId, String skillName) throws NoResourceFoundException {
+		Skill skill = skillRepo.findByUserUserIdAndSkillName(userId, skillName);
+		
+		ImageResponseDTO imageResponseDTO = new ImageResponseDTO();
+		
+		System.out.println("skill which was fetched user and name => " + skill);
+		if(skill != null) {
+			imageResponseDTO.setFileName(skill.getIconName());
+			imageResponseDTO.setImageData(skill.getSkillIcon());
+			imageResponseDTO.setImageType(skill.getIconType());
+		} else {
+			throw new NoResourceFoundException("skill Not found for this userid and skillname");
+		}
+		
+		return imageResponseDTO;
 	}
 }

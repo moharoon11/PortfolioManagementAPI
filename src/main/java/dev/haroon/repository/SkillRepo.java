@@ -12,4 +12,7 @@ import dev.haroon.entities.Skill;
 public interface SkillRepo extends JpaRepository<Skill, Integer> {
 
 	   Set<Skill> findByUserUserId(Integer userId);
+	   
+	   Skill findByUserUserIdAndSkillName(Integer userId, String skillName);
+
 }

@@ -22,6 +22,7 @@ public class Project {
 
     private String projectName;
 
+    @Lob
     private String projectDescription;
 
     @Lob

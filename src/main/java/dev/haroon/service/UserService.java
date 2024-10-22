@@ -31,5 +31,7 @@ public interface UserService {
 	public String updateUserFields(UserDTO userDTO) throws NoResourceFoundException;
 	
 	public String updateProfileImage(Integer userId, MultipartFile profileImage, String whichProfile) throws NoResourceFoundException, IOException ;
+	
+	public ImageResponseDTO loadImage(Integer userId, String whichImage) throws NoResourceFoundException, IOException;
 
 }

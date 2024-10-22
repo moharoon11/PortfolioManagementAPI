@@ -233,6 +233,24 @@ public class UserServiceImpl implements UserService {
 
 	     return new ImageResponseDTO(user.getResume(), user.getResumeName(), user.getResumeType());
 	 }
+	 
+	    @Override
+		public ImageResponseDTO loadImage(Integer userId, String whichImage) throws NoResourceFoundException, IOException {
+	    	 User user = userRepo.findById(userId)
+                     .orElseThrow(() -> new NoResourceFoundException("User Not Found!"));
+	    	 
+	    	 ImageResponseDTO imageResponseDTO = null;
+	    	 
+	    	 if(whichImage.equals("image1")) {
+	    		 imageResponseDTO = new ImageResponseDTO(user.getUserImage1(), user.getUserImage1FileName(), user.getUserImage1Type());
+	    	 } else if(whichImage.equals("image2")) {
+	    		 imageResponseDTO = new ImageResponseDTO(user.getUserImage2(), user.getUserImage2FileName(), user.getUserImage2Type());
+	    	 } else if(whichImage.equals("image3")) {
+	    		 imageResponseDTO = new ImageResponseDTO(user.getUserImage3(), user.getUserImage3FileName(), user.getUserImage3Type());
+	    	 }
+	    	
+			return imageResponseDTO;
+		}
 
 
 
@@ -272,6 +290,10 @@ public class UserServiceImpl implements UserService {
 	public User getUserById(Integer userId) {
 		return userRepo.findById(userId).get();
 	}
+
+
+
+	
 
 
 

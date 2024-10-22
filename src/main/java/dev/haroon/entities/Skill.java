@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,13 @@ public class Skill {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer skillId;
+	
+	@Lob
+	private byte[] skillIcon;
+	
+	private String iconType;
+	
+	private String iconName;
 	
 	private String skillName;
 	
